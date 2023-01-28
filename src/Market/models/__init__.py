@@ -7,3 +7,8 @@ from .user import (
     CreateUser,
     AuthUser
 )
+
+from .product import (
+    Product,
+    CreateProduct
+)
