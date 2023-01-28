@@ -35,7 +35,7 @@ async def get_product(
 
 
 @router.get(
-    '/all',
+    '/',
     status_code=status.HTTP_200_OK,
     response_model=List[Product]
 )
