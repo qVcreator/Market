@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, List
 
 from fastapi import Depends
 from sqlalchemy import select
@@ -35,7 +35,7 @@ class UserDal:
 
         await self.session.commit()
 
-    async def get_all_users(self) -> User:
+    async def get_all_users(self) -> List[User]:
         query = (
             select(User)
             .filter_by(is_deleted=False)

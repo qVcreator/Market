@@ -78,23 +78,23 @@ class AuthService:
     def __init__(self, user_dal: UserDal = Depends):
         self.user_dal = user_dal
 
-    async def register_new_user(
-            self,
-            user_data: models.CreateUser,
-    ) -> models.Token:
-        user = tables.User(
-            email=user_data.email,
-            first_name=user_data.first_name,
-            second_name=user_data.second_name,
-            father_name=user_data.first_name,
-            role=models.Role.USER,
-            is_deleted=False,
-            password=self.hash_password(user_data.password),
-        )
-
-        await self.user_dal.create_user(user)
-
-        return self.create_token(user)
+    # async def register_new_user(
+    #         self,
+    #         user_data: models.CreateUser,
+    # ) -> models.Token:
+    #     user = tables.User(
+    #         email=user_data.email,
+    #         first_name=user_data.first_name,
+    #         second_name=user_data.second_name,
+    #         father_name=user_data.first_name,
+    #         role=models.Role.USER,
+    #         is_deleted=False,
+    #         password=self.hash_password(user_data.password),
+    #     )
+    #
+    #     await self.user_dal.create_user(user)
+    #
+    #     return self.create_token(user)
 
     async def authenticate_user(
             self,
