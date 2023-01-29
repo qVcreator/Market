@@ -3,13 +3,17 @@ from typing import Type
 
 from fastapi import Depends, HTTPException, status
 
+from Market import models
 from Market.dal.account import AccountDal
+from Market.services.transaction import TransactionService
 from Market.tables import Account
 
 
 class AccountService:
     def __init__(self,
-                 account_dal: AccountDal = Depends()):
+                 account_dal: AccountDal = Depends(),
+                 transaction_service: TransactionService = Depends()):
+        self.transaction_service = transaction_service
         self.account_dal = account_dal
 
     async def get_account_balance(
@@ -44,5 +48,10 @@ class AccountService:
             amount: Decimal,
             account_id: int
     ):
+        new_transaction = models.CreateTransaction(
+            account_id=account_id,
+            amount=amount
+        )
+        await self.transaction_service.create_transaction(new_transaction)
         await self.account_dal.update_balance(amount, account_id)
 
