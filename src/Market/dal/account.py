@@ -15,17 +15,6 @@ class AccountDal:
             session: AsyncSession = Depends(get_async_session)):
         self.session = session
 
-    async def get_account_balance(
-            self,
-            account_id: int
-    ) -> Decimal:
-        account = await (
-            self.session
-            .get(Account, account_id)
-        )
-
-        return account.balance
-
     async def get_account(
             self,
             account_id: int
@@ -40,7 +29,7 @@ class AccountDal:
     async def get_all_users_account(
             self,
             user_id: int
-    ) -> List[Account]:
+    ) -> Type[List[Account]]:
         query = select(Account).filter_by(user_id=user_id)
 
         accounts = await (
