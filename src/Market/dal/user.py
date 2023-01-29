@@ -1,3 +1,5 @@
+from typing import Type
+
 from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -50,4 +52,14 @@ class UserDal:
         return await (
             self.session
             .get(User, user_id)
+        )
+
+    async def get_user_by_email(
+            self,
+            email: str) -> Type[User] | None:
+
+        return await (
+            self.session
+            .get(User,
+                 {'email': email})
         )

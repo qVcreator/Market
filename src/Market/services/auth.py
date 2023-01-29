@@ -6,10 +6,11 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from passlib.hash import bcrypt
 from pydantic import ValidationError
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from Market import tables, models
-from Market.database import get_session
+from Market.dal.user import UserDal
 from Market.settings import settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/auth/sign-in/')
@@ -74,10 +75,10 @@ class AuthService:
         result = models.Token(access_token=token)
         return result
 
-    def __init__(self, session: Session = Depends(get_session)):
-        self.session = session
+    def __init__(self, user_dal: UserDal = Depends):
+        self.user_dal = user_dal
 
-    def register_new_user(
+    async def register_new_user(
             self,
             user_data: models.CreateUser,
     ) -> models.Token:
@@ -85,16 +86,17 @@ class AuthService:
             email=user_data.email,
             first_name=user_data.first_name,
             second_name=user_data.second_name,
-            date_create=datetime.datetime.now(),
+            father_name=user_data.first_name,
             role=models.Role.USER,
             is_deleted=False,
             password=self.hash_password(user_data.password),
         )
-        self.session.add(user)
-        self.session.commit()
+
+        await self.user_dal.create_user(user)
+
         return self.create_token(user)
 
-    def authenticate_user(
+    async def authenticate_user(
             self,
             email: str,
             password: str,
@@ -105,12 +107,7 @@ class AuthService:
             headers={'WWW-Authenticate': 'Bearer'},
         )
 
-        user = (
-            self.session
-            .query(tables.User)
-            .filter(tables.User.email == email)
-            .first()
-        )
+        user = await self.user_dal.get_user_by_email(email)
 
         if not user:
             raise exception

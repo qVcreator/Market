@@ -49,3 +49,17 @@ class AccountDal:
         )
 
         return accounts.scalars().all()
+
+    async def update_balance(
+            self,
+            amount: Decimal,
+            account_id: int
+    ):
+        account_id = await (
+            self.session
+            .get(Account, account_id)
+        )
+
+        account_id -= amount
+
+        await self.session.commit()

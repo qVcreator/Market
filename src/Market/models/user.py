@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 from ..models import Role
@@ -18,6 +20,7 @@ class CreateUser(BaseModel):
     password: str
     first_name: str
     second_name: str
+    father_name: Optional[str]
 
     class Config:
         orm_mode = True
