@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, List
 
 from fastapi import Depends
 from sqlalchemy import select
@@ -23,7 +23,7 @@ class TransactionDal:
     async def get_all_transactions_by_user_id(
             self,
             user_id: int
-    ) -> Transaction:
+    ) -> Type[List[Transaction]]:
         query = select(Transaction).filter_by(user_id=user_id)
         result = await (
             self.session

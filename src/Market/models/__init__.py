@@ -12,3 +12,7 @@ from .product import (
     Product,
     CreateProduct
 )
+
+from .transaction import (
+    CreateTransaction
+)
