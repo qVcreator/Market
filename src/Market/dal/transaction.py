@@ -20,8 +20,11 @@ class TransactionDal:
             .get(Transaction, transaction_id)
         )
 
-    async def get_all_transactions(self) -> Transaction:
-        query = select(Transaction)
+    async def get_all_transactions_by_user_id(
+            self,
+            user_id: int
+    ) -> Transaction:
+        query = select(Transaction).filter_by(user_id=user_id)
         result = await (
             self.session
             .execute(query)
