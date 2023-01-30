@@ -44,11 +44,11 @@ class AccountDal:
             amount: Decimal,
             account_id: int
     ):
-        account_id = await (
+        account = await (
             self.session
             .get(Account, account_id)
         )
 
-        account_id -= amount
+        account.balance -= amount
 
         await self.session.commit()

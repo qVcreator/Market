@@ -17,6 +17,3 @@ class CreateProduct(BaseModel):
     title: str
     description: str
     price: Decimal
-
-    class Config:
-        orm_mode = True

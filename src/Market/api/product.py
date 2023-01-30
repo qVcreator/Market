@@ -2,8 +2,10 @@ from typing import List
 
 from fastapi import APIRouter, status, Depends
 
+from .. import models
 from ..models import *
 from ..services.product import ProductService
+from ..services.role import RoleChecker
 
 router = APIRouter(
     prefix="/products",
@@ -43,3 +45,18 @@ async def get_all_products(
         product_service: ProductService = Depends()
 ):
     return await product_service.get_all_products()
+
+
+@router.post(
+    '/{product_id}/payment/account/{account_id}',
+    status_code=status.HTTP_200_OK
+)
+async def buy_product(
+        product_id: int,
+        account_id: int,
+        current_user: models.AuthUser = Depends(RoleChecker([
+            models.Role.USER,
+        ])),
+        product_service: ProductService = Depends()
+):
+    await product_service.buy_product(current_user.id, product_id, account_id)
