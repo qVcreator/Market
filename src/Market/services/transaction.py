@@ -4,7 +4,6 @@ from fastapi import Depends
 
 from Market import models, tables
 from Market.dal.transaction import TransactionDal
-from Market.services.account import AccountService
 from Market.tables import Transaction
 
 

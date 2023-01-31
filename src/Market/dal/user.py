@@ -1,11 +1,11 @@
-from typing import Type, List
+from typing import List
 
 from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from Market.database import get_async_session
-from Market.tables import User
+from ..database import get_async_session
+from ..tables import User
 
 
 class UserDal:
@@ -17,10 +17,9 @@ class UserDal:
     async def create_user(
             self,
             user_data: User
-    ) -> int:
+    ):
         self.session.add(user_data)
         await self.session.commit()
-        return user_data.id
 
     async def delete_user(
             self,
@@ -56,7 +55,7 @@ class UserDal:
 
     async def get_user_by_email(
             self,
-            email: str) -> Type[User] | None:
+            email: str) -> User | None:
 
         return await (
             self.session

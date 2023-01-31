@@ -75,7 +75,7 @@ class AuthService:
         result = models.Token(access_token=token)
         return result
 
-    def __init__(self, user_dal: UserDal = Depends):
+    def __init__(self, user_dal: UserDal = Depends()):
         self.user_dal = user_dal
 
     # async def register_new_user(
