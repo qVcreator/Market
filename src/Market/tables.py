@@ -27,7 +27,7 @@ class User(Base):
     father_name = Column(String)
     date_create = Column(DateTime(timezone=True), server_default=functions.now())
     date_update = Column(DateTime(timezone=True), onupdate=functions.now())
-    is_deleted = Column(Boolean)
+    is_deleted = Column(Boolean, default=False)
 
 
 class Product(Base):
@@ -36,6 +36,7 @@ class Product(Base):
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
     price = Column(DECIMAL, nullable=False)
+    is_deleted = Column(Boolean, default=False)
 
 
 class Account(Base):

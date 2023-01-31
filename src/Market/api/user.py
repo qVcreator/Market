@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, status, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -37,3 +39,29 @@ async def sign_in(
         auth_data.username,
         auth_data.password,
     )
+
+
+@router.get(
+    '/all/',
+    status_code=status.HTTP_200_OK,
+    response_model=List[models.ShowUser]
+)
+async def get_all_users():
+    pass
+
+
+@router.get(
+    '/{user_id}',
+    status_code=status.HTTP_200_OK,
+    response_model=models.ShowUser
+)
+async def get_user_by_id(user_id: int):
+    pass
+
+
+@router.delete(
+    '/{user_id}',
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_user_by_id(user_id: int):
+    pass

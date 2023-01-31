@@ -19,6 +19,9 @@ router = APIRouter(
 )
 async def add_product(
         product_data: CreateProduct,
+        current_user: models.AuthUser = Depends(RoleChecker([
+            models.Role.USER,
+        ])),
         product_service: ProductService = Depends()
 ):
     return await product_service.create_product(product_data)
@@ -31,6 +34,10 @@ async def add_product(
 )
 async def get_product(
         product_id: int,
+        current_user: models.AuthUser = Depends(RoleChecker([
+            models.Role.USER,
+            models.Role.ADMIN
+        ])),
         product_service: ProductService = Depends()
 ):
     return await product_service.get_product(product_id)
@@ -42,6 +49,10 @@ async def get_product(
     response_model=List[Product]
 )
 async def get_all_products(
+        current_user: models.AuthUser = Depends(RoleChecker([
+            models.Role.USER,
+            models.Role.ADMIN
+        ])),
         product_service: ProductService = Depends()
 ):
     return await product_service.get_all_products()
@@ -60,3 +71,11 @@ async def buy_product(
         product_service: ProductService = Depends()
 ):
     await product_service.buy_product(current_user.id, product_id, account_id)
+
+
+@router.delete(
+    '/{product_id}',
+    status_code=status.HTTP_204_NO_CONTENT
+)
+async def delete_product_by_id(product_id: int):
+    pass

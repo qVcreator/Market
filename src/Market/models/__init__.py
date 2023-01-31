@@ -5,7 +5,8 @@ from .auth import Token
 from .user import (
     User,
     CreateUser,
-    AuthUser
+    AuthUser,
+    ShowUser
 )
 
 from .product import (

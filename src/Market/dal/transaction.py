@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from Market.database import get_async_session
-from Market.tables import Transaction
+from Market.tables import Transaction, Account
 
 
 class TransactionDal:
@@ -24,7 +24,9 @@ class TransactionDal:
             self,
             user_id: int
     ) -> Type[List[Transaction]]:
-        query = select(Transaction).filter_by(user_id=user_id)
+        query = select(Transaction)\
+            .filter(Transaction.account.any(Account.user_id == user_id))
+
         result = await (
             self.session
             .execute(query)
