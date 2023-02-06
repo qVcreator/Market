@@ -17,7 +17,7 @@ router = APIRouter(
     status_code=status.HTTP_200_OK,
     response_model=List[models.ShowAccount]
 )
-async def get_all_accounts(
+async def get_all_users_account(
         account_service: AccountService = Depends(),
         current_user: models.AuthUser = Depends(RoleChecker([
             models.Role.USER,
@@ -40,12 +40,3 @@ async def get_account_by_id(
         ]))
 ):
     return await account_service.get_account(current_user.id, account_id)
-
-
-@router.get(
-    '/user/{user_id}',
-    status_code=status.HTTP_200_OK,
-    response_model=List[models.ShowAccount]
-)
-async def get_all_accounts_by_user_id(user_id: int):
-    pass

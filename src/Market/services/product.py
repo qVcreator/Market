@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import Depends, HTTPException, status
 
 from .account import AccountService
@@ -12,14 +14,19 @@ class ProductService:
             product_dal: ProductDal = Depends()):
         self.product_dal = product_dal
         self.account_service = account_service
+        logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
 
     async def get_all_products(self):
+        logging.info('call dal method to get all products')
         return await self.product_dal.get_all_products()
 
     async def get_product(self, product_id: int):
+        logging.info('call dal method to get product by id')
         product = await self.product_dal.get_product(product_id)
 
         if product is None:
+            logging.error(f'product with such id as {product_id} is not found')
+
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Product with such id doesn't exist"
@@ -51,3 +58,6 @@ class ProductService:
             )
 
         await self.account_service.update_account_balance(product.price, account.id)
+
+    async def delete_product_by_id(self, product_id: int):
+        await self.product_dal.delete_product_by_id(product_id)

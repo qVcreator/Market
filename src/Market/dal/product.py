@@ -35,4 +35,14 @@ class ProductDal:
         await self.session.commit()
         return product.id
 
+    async def delete_product_by_id(self, product_id: int):
+        product = await (
+            self.session
+            .get(Product, product_id)
+        )
+
+        product.is_deleted = True
+
+        await self.session.commit()
+
 
